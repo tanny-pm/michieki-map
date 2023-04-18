@@ -51,7 +51,21 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
           type: "circle",
           source: "station-points",
           paint: {
-            "circle-radius": 10,
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              1,
+              0.1,
+              5,
+              3,
+              10,
+              10,
+              15,
+              15,
+              20,
+              30,
+            ],
             "circle-color": [
               "case",
               ["==", ["get", "P35_016"], 1],
