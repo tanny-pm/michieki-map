@@ -1,6 +1,27 @@
 import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import React, { useEffect, useRef } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
+import { renderToString } from "react-dom/server";
+import {
+  FaBaby,
+  FaCampground,
+  FaChargingStation,
+  FaCoffee,
+  FaGasPump,
+  FaHandsHelping,
+  FaHotTub,
+  FaHotel,
+  FaInfo,
+  FaMoneyBillWave,
+  FaMountain,
+  FaShoppingBag,
+  FaShower,
+  FaTree,
+  FaUtensils,
+  FaWheelchair,
+  FaWifi,
+} from "react-icons/fa";
+import { MdOutlineMuseum } from "react-icons/md";
 
 interface MapProps {
   zoom: [number];
@@ -8,6 +29,10 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ zoom, center }) => {
+  const renderIconToString = (icon: ReactElement) => {
+    return renderToString(icon);
+  };
+
   const mapContainer = useRef<HTMLDivElement | null>(null);
 
   const loadGeoJSON = async (url: string) => {
@@ -36,6 +61,12 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
           layers: [{ id: "osm-layer", type: "raster", source: "osm" }],
         },
       });
+
+      // 現在地を取得する
+      const geolocate = new maplibre.GeolocateControl({
+        trackUserLocation: true,
+      });
+      map.addControl(geolocate, "bottom-right");
 
       map.on("load", async () => {
         const stationData = await loadGeoJSON("roadside_station.geojson");
@@ -87,11 +118,11 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
           id: "station-points-text",
           type: "symbol",
           source: "station-points",
-          minzoom: 9,
+          minzoom: 8,
           layout: {
             "text-field": ["get", "P35_006"],
             "text-font": ["Noto Sans CJK JP Regular"],
-            "text-offset": [0, 0.5],
+            "text-offset": [0, 0.8],
             "text-anchor": "top",
             "text-size": [
               "interpolate",
@@ -121,10 +152,122 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
             const stationName = feature.properties?.P35_006;
             popup
               .setLngLat(feature.geometry.coordinates)
-              .setHTML(stationName)
+              .setHTML(
+                `\
+                <div style="font-weight:900; font-size: 1rem;"><a href=${
+                  feature.properties?.P35_007
+                }>${feature.properties?.P35_006}</a></div>\
+                <div>${feature.properties?.P35_003} ${
+                  feature.properties?.P35_004
+                }</div>\
+                <div style="display: flex;>\
+                <span ${
+                  feature.properties?.P35_011 === 1.0 ? "" : ' color:#ccc"'
+                }>${renderIconToString(<FaMoneyBillWave />)}</span>\
+                <span${
+                  feature.properties?.P35_012 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }> ${renderIconToString(<FaBaby />)}</span>\
+                <span${
+                  feature.properties?.P35_013 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }> ${renderIconToString(<FaUtensils />)}</span>\ 
+                <span${
+                  feature.properties?.P35_014 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaCoffee />)}</span>\   
+                <span${
+                  feature.properties?.P35_015 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(
+                  <FaHotel />
+                )}</span>\                                  
+                <span${
+                  feature.properties?.P35_016 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaHotTub />)}</span>\ 
+                <span${
+                  feature.properties?.P35_017 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaCampground />)}</span>\ 
+                <span${
+                  feature.properties?.P35_018 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaTree />)}</span>\ 
+                <span${
+                  feature.properties?.P35_019 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaMountain />)}</span>\ 
+                <span${
+                  feature.properties?.P35_020 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<MdOutlineMuseum />)}</span>\ 
+                <span${
+                  feature.properties?.P35_021 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaGasPump />)}</span>\ 
+                <span${
+                  feature.properties?.P35_022 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaChargingStation />)}</span>\ 
+                <span${
+                  feature.properties?.P35_023 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaWifi />)}</span>\ 
+                <span${
+                  feature.properties?.P35_024 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaShower />)}</span>\ 
+                <span${
+                  feature.properties?.P35_025 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaHandsHelping />)}</span>\ 
+                <span${
+                  feature.properties?.P35_026 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaInfo />)}</span>\ 
+                <span${
+                  feature.properties?.P35_027 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(
+                  <FaWheelchair />
+                )}</span>\                 
+                <span${
+                  feature.properties?.P35_028 === 1.0
+                    ? ""
+                    : ' style="color:#ccc"'
+                }>  ${renderIconToString(<FaShoppingBag />)}</span>\   
+                </div>\
+                `
+              )
               .addTo(map);
           }
         });
+      });
+
+      // ピンにマウスオーバーしたときにカーソルをポインターにする
+      map.on("mouseenter", "station-points", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+
+      map.on("mouseleave", "station-points", () => {
+        map.getCanvas().style.cursor = "";
       });
 
       return () => {
