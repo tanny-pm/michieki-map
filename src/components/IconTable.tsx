@@ -1,5 +1,4 @@
 import {
-  FaArt,
   FaBaby,
   FaCampground,
   FaChargingStation,
@@ -22,12 +21,13 @@ import {
   MdLocalCafe,
   MdLocalGasStation,
   MdLocalLaundryService,
+  MdOutlineMuseum,
 } from "react-icons/md";
 
 const IconTable = () => {
   return (
     <div>
-      <table>
+      <table style={{ borderCollapse: "collapse", margin: "16px" }}>
         <thead>
           <tr>
             <th>単語</th>
@@ -93,7 +93,7 @@ const IconTable = () => {
           <tr>
             <td>美術館・博物館</td>
             <td>
-              <FaArt />
+              <MdOutlineMuseum />
             </td>
           </tr>
           <tr>

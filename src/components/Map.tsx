@@ -23,6 +23,7 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
         center: center,
         style: {
           version: 8,
+          glyphs: "https://glyphs.geolonia.com/{fontstack}/{range}.pbf",
           sources: {
             osm: {
               type: "raster",
@@ -81,16 +82,30 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
           },
         });
 
-        // TODO: 道の駅の名称を表示する（日本語フォント対応する）
+        // 道の駅の名称を表示する
         map.addLayer({
           id: "station-points-text",
           type: "symbol",
           source: "station-points",
+          minzoom: 9,
           layout: {
             "text-field": ["get", "P35_006"],
-            "text-variable-anchor": ["top", "bottom", "left", "right"],
-            "text-radial-offset": 0.5,
-            "text-justify": "auto",
+            "text-font": ["Noto Sans CJK JP Regular"],
+            "text-offset": [0, 0.5],
+            "text-anchor": "top",
+            "text-size": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              10, // zoom is 10 (or less)
+              10, // font-size is 8px
+              14, // zoom is 14 (or greater)
+              14, // font-size is 14px
+            ],
+          },
+          paint: {
+            "text-halo-width": 2,
+            "text-halo-color": "#fff",
           },
         });
 
