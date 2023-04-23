@@ -56,7 +56,8 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
               tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
               maxzoom: 19,
               tileSize: 256,
-              attribution: "© OpenStreetMap contributors",
+              attribution:
+                "&copy;<a href='https://openstreetmap.org'>OpenStreetMap</a> contributors",
             },
           },
           layers: [{ id: "osm-layer", type: "raster", source: "osm" }],
@@ -76,6 +77,8 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
         map.addSource("station-points", {
           type: "geojson",
           data: stationData,
+          attribution:
+            '<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P35.html">国土交通省国土数値情報ダウンロードサイト</a>',
         });
 
         // 地形データ生成
