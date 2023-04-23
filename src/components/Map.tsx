@@ -165,7 +165,7 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
           closeOnClick: true,
         });
 
-        map.on("click", "station-points", (e) => {
+        map.on("click", "station-points", (e: any) => {
           if (e.features && e.features.length > 0) {
             const feature = e.features[0];
             popup
