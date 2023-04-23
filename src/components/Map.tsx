@@ -1,4 +1,5 @@
 import maplibre from "maplibre-gl";
+import { useGsiTerrainSource } from "maplibre-gl-gsi-terrain";
 import "maplibre-gl/dist/maplibre-gl.css";
 import React, { ReactElement, useEffect, useRef } from "react";
 import { renderToString } from "react-dom/server";
@@ -75,6 +76,21 @@ const Map: React.FC<MapProps> = ({ zoom, center }) => {
         map.addSource("station-points", {
           type: "geojson",
           data: stationData,
+        });
+
+        // 地形データ生成
+        const gsiTerrainSource = useGsiTerrainSource(maplibre.addProtocol);
+        map.addSource("terrain", gsiTerrainSource);
+
+        // 陰影図追加
+        map.addLayer({
+          id: "hillshade",
+          source: "terrain",
+          type: "hillshade",
+          paint: {
+            "hillshade-illumination-anchor": "map",
+            "hillshade-exaggeration": 0.3,
+          },
         });
 
         // 道の駅のピンを表示する
