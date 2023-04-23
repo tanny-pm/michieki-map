@@ -1,0 +1,2 @@
+// PWA
+self.addEventListener("fetch", () => {});
